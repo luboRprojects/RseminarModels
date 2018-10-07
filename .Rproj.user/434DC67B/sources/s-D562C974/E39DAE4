@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1536337581546.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1321761537",
+    "id" : "E39DAE4",
+    "lastKnownWriteTime" : 1538925076,
+    "last_content_update" : 1538925076906,
+    "path" : "C:/Users/Lubor/Disk Google/Work/2018/R_seminar/R_seminar.Rnw",
+    "project_path" : "R_seminar.Rnw",
+    "properties" : {
+        "cursorPosition" : "570,35",
+        "scrollLine" : "546",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "sweave"
+}

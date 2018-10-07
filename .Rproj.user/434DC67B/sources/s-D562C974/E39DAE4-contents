@@ -1,0 +1,970 @@
+\documentclass[12pt]{beamer}
+%\usepackage[dvipsnames]{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+library(knitr)
+library(tidyverse)
+opts_chunk$set(fig.align="center", fig.height=3.7, out.width="1\\textwidth")
+@
+
+
+\title{\textsc{statistical methods in r} }
+\subtitle{Lubor Homolka}
+\date{September $11^{\text{th}}$, 2018}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%-----------
+
+\begin{frame}
+ \tableofcontents
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\footnotesize
+\frametitle{}
+
+<<>>=
+str(mtcars)
+mtcars$mpg
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\Huge \centering
+
+{\Large Qualitative \& Quantitative Research}\vspace{2cm}
+
+What's the difference?  \\{\Large(Statistical view)}
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{What qualitative researcher see...}
+
+\begin{figure}
+ \includegraphics[width=0.7\paperwidth]{./Images/regQualit}
+\end{figure}
+\end{frame}
+
+
+%-----------
+
+\begin{frame}\large
+\frametitle{What Quant See..}
+
+\begin{figure}
+ \includegraphics[width=0.7\paperwidth]{./Images/CIreg}
+\end{figure}
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{If All Replications are observed}
+
+\begin{figure}
+ \includegraphics[width=0.7\paperwidth]{./Images/CIregLines}
+\end{figure}
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Do we need all the replications?}
+
+\begin{figure}
+ \includegraphics[width=0.7\paperwidth]{./Images/CItogether}
+\end{figure}
+\end{frame}
+
+%-----------
+
+\section{Standard Inferential Tests}
+
+\begin{frame}\Large
+\frametitle{What is Statistical Inference?}
+
+\large{Statistical inferrence is a process of estimating a population characteristic based on the sample statistics.} \bigskip
+
+\centering\begin{tabular}{c|c}
+Sample &  Population \\ \hline 
+$\bar{x}$ & $\mu$ \\ 
+$r_{x_1x_2}$ & $\rho_{x_1x_2}$ \\ 
+$y=b_0+b_1x$ & $y=\beta_0+\beta_1x$
+\end{tabular} 
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Tools of Statistical Inference}
+
+\begin{itemize}
+ \item Point estimate
+ \item Interval estimate $\rightarrow$ confidence intervals
+ \item Null hypothesis testing (NHST)
+\end{itemize}
+
+\onslide<2-> NHST: We try to falsify statement $H_0$ by finding a counter-proof stated in the $H_A$. 
+
+\end{frame}
+
+%-----------
+
+    
+    \begin{frame}[plain]
+   \hspace*{-1.1cm} \includegraphics[height=\paperheight,width=\paperwidth]{./Images/yetti}
+    \end{frame}
+    
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Selected Test}
+
+\begin{itemize}
+ \item Test of Equal or Given Proportions
+ \item Pearson's $\chi^2$ Test for Count Data
+ \item Pearson \& Spearman correlation
+ \item t-test
+\end{itemize}
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Test of Equal or Given Proportions}
+
+This test tests whether the characteristics of the population \textcolor{blue}{$\pi$} can take some values.\bigskip
+
+\textbf{Example:} You want to prove that the proportion of companies which are ready to adopt a new technology is smaller than \textcolor{blue}{50\%}. \smallskip\onslide<2->
+
+
+\textcolor{red}{$H_0: \pi=0.5$ is what you want to disprove.} \smallskip
+
+\textcolor{blue}{$H_A: \pi< 0.5$ is what you want to prove.}\bigskip\onslide<3->
+
+You have asked 100 companies, 45 are ready.
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+\frametitle{What do all these number mean?}
+
+<<size="small">>=
+prop.test(x=45, n=100, alternative="less", p=0.5)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Let's start with p-value}
+
+\begin{equation}\nonumber
+ \text{p-value} = P(\text{Data}\vert H_0=\text{TRUE})
+\end{equation}
+
+\onslide<2-> which is not 
+
+\begin{equation}\nonumber
+ P(H_0=\text{TRUE}\vert \text{Data})
+\end{equation}
+
+which is, what we want! \bigskip\onslide<3->
+
+Data: possible results which would contradict $H_0$ and favour $H_A$ more than the observed result.
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+\frametitle{Consider this Example with \textcolor{blue}{$H_A: \pi\neq 0.5$} }
+
+<<size="small">>=
+prop.test(x=45, n=100, alternative="two.sided", p=0.5)
+@
+
+Let's focus on Confidence intervals
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Confidence Interval with $\alpha=0.9$}
+
+\begin{figure}
+\hspace*{-0.8cm} \includegraphics[width=1\paperwidth]{./Images/ci90.png}
+\end{figure}
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Confidence Interval with $\alpha=0.95$}
+
+\begin{figure}
+\hspace*{-0.8cm}  \includegraphics[width=0.95\paperwidth]{./Images/ci95.png}
+\end{figure}
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Test of Equal or Given Proportions}
+
+<<size="small">>=
+prop.test(x=45, n=100, alternative="less", p=0.5)
+@
+\onslide<2-> Don't forget that no evidence for $\pi< 0.5$ does not imply evidence for $\pi=0.5$.
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Test of Equal or Given Proportions}
+
+<<size="small">>=
+prop.test(x=450, n=1000, alternative="less", p=0.5)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Test of Equal or Given Proportions}
+
+<<size="small">>=
+prop.test(x=40, n=100, alternative="less", p=0.5)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Test of Equal or Given Proportions}
+
+This test tests whether $k$ population \textcolor{blue}{$\pi$} differ .\bigskip
+
+\textbf{Example:} You want to prove that the proportion of companies which are ready to adopt a new technology is smaller when the company is fully owned by Czech owners $\pi_1$, than proportion of international ready-companies $\pi_2$. \smallskip\onslide<2->
+
+
+\textcolor{red}{$H_0: \pi_1=\pi_2$ is what you want to disprove.} \smallskip
+
+\textcolor{blue}{$H_A: \pi_1< \pi_2$ is what you want to prove.}\bigskip\onslide<3->
+
+You have asked 100 CZ and 100 Int companies. 30CZ and 40Int companies are ready.
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Test of Equal or Given Proportions}
+
+<<size="small">>=
+prop.test(x=c(30, 40), n=c(100, 100), alternative="less")
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Pearson's $\chi^2$ Test for Count Data}
+
+This test tests associatio between two non-numeric variables.\bigskip
+
+\textbf{Example:} Example from Belas's Financial Markets book. Authors were intersted wheter Czech and Slovakian e-banking services are equally satisfied with the services. \smallskip\onslide<2->
+
+
+\textcolor{red}{$H_0: \text{no assoc. between nationality and satisfaction}$} \smallskip
+
+\textcolor{blue}{$H_A: \text{there is some assoc}$: this is what you want to prove.}\bigskip\onslide<3->
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+<<echo=FALSE>>=
+country <- c(rep("CZ", 100), rep("SK", 100) ) 
+satis <- c(
+rep("Yes", 62), rep("No", 26), rep("justOK", 12),
+rep("Yes", 61), rep("No", 23), rep("justOK", 16) )
+
+temp <- data.frame(country, satis)
+set.seed(123)
+idx <- sample(seq(200))
+bankingData <- temp[idx, ]
+@
+
+<<>>=
+head(bankingData)
+
+bankingData %>% table
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+<<>>=
+tab <- bankingData %>% table %>% t
+chisq.test(tab)
+@
+
+Conclusion: There is no evidence for statistically significant associaton.
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+Let's adjust the data to find association
+
+<<>>=
+tab2 <- matrix(c(12,35,40,16,23,61), ncol=3,
+               byrow = TRUE)
+tab2
+
+prop.table(tab2, 1) #1 means row margin
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+<<>>=
+chisq.test(tab2)
+@
+
+Conclusion: We have an evidence for statistically significant associaton. \onslide<2-> What caused the association? We need to inspect results:
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+<<size="small">>=
+chTest <- chisq.test(tab2)
+str(chTest)
+@
+
+Residuals is the key factor. It tells us what goes against our expectation stated in the $H_0$. 
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{}
+
+<<>>=
+chTest$residuals
+residChi <- chTest$residuals %>% data.frame() 
+colnames(residChi) <- c("justOK", "No", "Yes")
+rownames(residChi) <- c("CZ", "SK")
+residChi
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Correlation Tests}
+
+Test whether there is a relationship between two independent variables.\bigskip
+
+\textbf{Example:} You have measured IQ of 50 respondents and their reaction time in seconds. You don't expect direct relations between variables. But you expect there is some degree of correlation. \smallskip\onslide<2->
+
+\textcolor{red}{$H_0: \rho=0$ no correlation between variables} \smallskip
+
+\textcolor{blue}{$H_A: \rho\neq 0$} 
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+<<echo=FALSE>>=
+set.seed(123)
+dataCor <- data.frame( IQ = sort(sample(90:100, 50, replace=TRUE)) ) 
+dataCor <- dataCor %>% mutate(reaction=sqrt(IQ) + rnorm(50)  )
+@
+
+<<size="footnotesize">>=
+head(dataCor, 3)
+ggplot(dataCor, aes(x=IQ, y=reaction)) + geom_point()
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+<<size="small">>=
+cor(dataCor)
+
+cor.test(dataCor$IQ, dataCor$reaction)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Non-parametric Correlation Coefficient}
+<<size="small">>=
+cor.test(dataCor$IQ, dataCor$reaction, method="spearman")
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{t-test \& Welch t-test (safer option)}
+
+Test whether there is a difference in mean values of 2 groups.\bigskip
+
+\textbf{Example:} Czech and International companies are competing at the same market. Do Int companies perform better than Czech companies (Measured by ROA)? \smallskip\onslide<2->
+
+
+\textcolor{red}{$H_0: \mu_{CZ} = \mu_{Int}$}: $\mu_{CZ}$ is a true mean value of Czech companies' ROA \smallskip
+
+\textcolor{blue}{$H_A: \mu_{CZ} < \mu_{Int}$}
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Create Data for t-test}
+
+<<>>=
+set.seed(123) # for reproducibility
+company <- c(rep("CZ", 30), rep("Int", 40) )
+ROA <- c(
+ rnorm(30, mean=0.09, sd=0.1),
+ rnorm(40, mean=0.12, sd=0.1) ) 
+
+dataFin <- data.frame(company, ROA)
+summary(dataFin)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+
+<<>>=
+ggplot(dataFin, aes(x=company, y=ROA) ) + 
+  geom_boxplot()
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Welch t-test: $\mu$ of first group is \textbf{less} than second}
+<<size="footnotesize">>=
+t.test(dataFin$ROA ~ dataFin$company, alternative="less")
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{When we just explore, no expectation }
+<<size="footnotesize">>=
+t.test(dataFin$ROA ~ dataFin$company)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Welch t-test: $\mu$ of first group is \textbf{greater}}
+<<size="footnotesize">>=
+t.test(dataFin$ROA ~ dataFin$company, alternative="greater")
+@
+
+\end{frame}
+
+\section{Regression Analysis}
+
+%-----------
+
+\begin{frame}\Huge\centering
+Regression Analysis
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\tiny
+
+<<>>=
+library(ggplot2)
+ggplot(mtcars, aes(x=hp, y=mpg) ) + 
+  geom_point(size=2, shape=21, fill="grey") + 
+  geom_smooth(method="lm", se=FALSE, color="black")
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\large
+\frametitle{Purpose of Regression Analysis}
+
+The main purpose is to create a model of \textcolor{blue}{conditional} \textcolor{red}{expectation} of the \textcolor{orange}{dependent variable}. 
+
+\begin{equation}
+ \textcolor{red}{E}[\textcolor{orange}{y}\textcolor{blue}{\vert x}] \rightarrow y = f(x;\textcolor{magenta}{b}) 
+\end{equation}
+
+$f(\cdot)$ is a convenient function parametrised by parameters in vector $\textcolor{magenta}{b}$.
+
+\begin{equation}
+ y = \textcolor{magenta}{b_0} + \textcolor{magenta}{b_1}x_1 \nonumber
+\end{equation}
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{\textcolor{red}{E}[\textcolor{orange}{y}\textcolor{blue}{$\vert$x}]}
+
+<<echo=FALSE>>=
+pointDF <- data.frame(x=200, y=16.5)
+ggplot(mtcars, aes(x=hp, y=mpg) ) + 
+  geom_point(size=2, shape=21, fill="grey") + 
+  geom_smooth(method="lm", se=FALSE, color="red") + 
+  geom_vline(xintercept = 200, color="blue", size=1.25) + 
+  geom_point(data=pointDF, aes(x,y), colour="orange", size=4)
+@
+
+\onslide<2-> Unit increase of x leads to change in y by $b_1$... is usually wrong interpretation. The most important is the data design.
+
+\end{frame}
+
+%-----------
+
+\begin{frame}
+\frametitle{Linearity in Parameters}
+\begin{Large}
+
+ \begin{itemize}
+	\item relation between $\beta$ is additive
+	\item $\beta$ is not in a \emph{functional} form
+ \end{itemize}
+\begin{align}
+y &= \beta_0 + \beta_1x_1 + \beta_2x_2 + \epsilon \\[0.4cm]
+y &= \beta_0 + \beta_1\beta_2x_1 + \beta_3x_2 + \epsilon\\[0.4cm]
+y &= \beta_0 + \beta_1^{\beta_2x_1} + \epsilon\\[0.4cm]
+y &= \beta_0 + \sqrt{\beta_1}x_1 + \beta_2x_2 + \epsilon
+\end{align}
+\end{Large}
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Linear model in parameters II}
+\begin{equation}
+y = \beta_0 + \beta_1x + \beta_2x^2 + \epsilon
+\end{equation}
+
+\begin{figure}
+ \includegraphics[width=0.7\paperwidth]{./Images/quadratic}
+\end{figure}
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\large
+\frametitle{Linear Model}
+
+
+If the model is linear in parameters, OLS method can be used to estimate parameters. In this case function \texttt{lm()} can be used:
+
+<<>>=
+fit1 <- lm(mpg ~ hp, data=mtcars)
+@
+Intercept ($b_0$) is added automatically. \onslide<2-> Consider model with intercept value only:
+
+<<>>=
+fit0 <- lm(mpg ~ 1, data=mtcars)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\footnotesize
+
+<<>>=
+summary(fit0)
+@
+\onslide<2->
+<<>>=
+mean(mtcars$mpg)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\footnotesize
+
+<<>>=
+summary(fit1)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Polynomial Regression}
+There are two ways how to create polynomial (or log,...) regressions:
+\begin{enumerate}
+ \item Updating data before \texttt{lm}
+ 
+<<size="footnotesize">>=
+carsQuad <- mtcars %>% select(mpg, hp) %>%
+  mutate(hp2 = hp^2)
+
+lm(mpg ~ hp + hp2, data=carsQuad) %>% coef()
+@
+
+\onslide<2-> \item Inside of \texttt{lm}
+ 
+<<size="footnotesize">>=
+lm(mpg ~ hp + I(hp^2), data=mtcars) %>% coef()
+@
+ 
+\end{enumerate}
+
+
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Coding of Variables}
+
+$x=1$ means that highest achieved education level of a subject is a university degree. $x=0$ indicates non-university degree.
+%
+\begin{equation}
+ \text{wage} = 20\,000 + 5\,000x \nonumber
+\end{equation}
+%
+What if $x=1$ would mean non-university degree? \\[.4cm]
+
+\onslide<2-> Redefine the model to have the same economic meaning.
+\end{frame}
+
+%-----------
+
+\begin{frame}
+\frametitle{Useful Packages}
+<<message=FALSE>>=
+library(broom)
+
+library(car)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{R and Variable Coding}
+Recall there is a variable \texttt{cyl} which takes only values  \Sexpr{unique(sort(mtcars$cyl))}. 
+
+
+<<size="small">>=
+fit2 <- lm(mpg ~ cyl, mtcars)
+tidy(fit2)
+@
+
+What do you think about this model?
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{}
+
+<<size="small">>=
+carData <- mtcars %>%
+  mutate(cylinder = factor(cyl) )
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{R and Variable Coding}
+Recall there is a variable \texttt{cyl} which takes only values  \Sexpr{unique(sort(mtcars$cyl))}. 
+
+
+<<size="small">>=
+fit2.1 <- lm(mpg ~ cylinder, carData)
+tidy(fit2.1)
+@
+
+This model is written as $y = b_0 + b_1x_1 + b_2x_2$ where $b_2=-11.6$ corresponds to the effect of 8 cylinders on \texttt{mpg}.
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\small
+\frametitle{Following Tests -- Wald test}
+
+<<>>=
+linearHypothesis(fit2.1, "cylinder6 = cylinder8", test="F")
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\small
+\frametitle{Confidence Intervals}
+
+<<>>=
+intervalsM2.1 <- data.frame(confint(fit2.1))
+intervalsM2.1 
+
+colnames(intervalsM2.1) <- c("Low", "Upp")
+intervalsM2.1$Estimate <- coef(fit2.1)
+intervalsM2.1 
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{}
+
+<<>>=
+ggplot(intervalsM2.1, aes(
+   x=rownames(intervalsM2.1), y=Estimate) ) + 
+  geom_point() +
+  geom_errorbar(aes(ymin=Low, ymax=Upp), width=0.3) 
+@
+
+\end{frame}
+
+\section{Time-Series Modelling}
+
+\begin{frame}\Huge\centering
+Time-Series 
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{Useful Packages}
+<<message=FALSE>>=
+library(forecast) # Smoothing and many many more
+
+library(vars) # Vector Autoregressive Models
+
+library(urca) # unit-root and cointegration tests
+
+library(xts) # Time-series objects
+
+library(lubridate) # works with Date type
+
+@
+
+\textcolor{red}{Revolution in progress!} \texttt{library(tstibble)}, new version of \texttt{forecast} called \texttt{fable}.
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Time Series}
+
+\begin{itemize}
+ \item Very different methodological approach (stationarity)
+ \item Seasonality
+ \item Time series is a set of autocorrelated values (unlike cross-sectional)
+\end{itemize}
+
+\textcolor{red}{\textsc{NEVER}} use standard Pearson Correlation test to analyse time-series!
+
+
+\end{frame}
+
+
+%-----------
+
+\begin{frame}[fragile]
+\frametitle{R Demonstration of Spurious Correlation}
+<<echo=FALSE>>=
+set.seed(123)
+df <- data.frame(t=seq(100), ts1 = 3+rnorm(100), ts2 = 5+rnorm(100) )
+
+df %>%
+ gather(ts, value,-t) %>%
+ ggplot(., aes(x=t, y=value, colour=ts) ) + 
+  geom_point()+
+  geom_line()
+@
+<<>>=
+cor(df$ts1, df$ts2)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\footnotesize
+<<>>=
+df2 <- df %>% mutate( 
+ ts1 = ts1 + 1.5 + 0.2*seq(100),
+ ts2 = ts2 + 1.5 + 0.2*seq(100) )
+@
+
+<<echo=FALSE>>=
+df2 %>%
+ gather(ts, value,-t) %>%
+ ggplot(., aes(x=t, y=value, colour=ts) ) + 
+  geom_point()+
+  geom_line()
+@
+\onslide<2->
+<<echo=TRUE>>=
+cor(df2$ts1, df2$ts2)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\frametitle{Spurious Correlation}
+ \includegraphics[height=0.8\paperheight,width=0.8\paperwidth]{./Images/spurious}
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Stationarity}
+
+Assumption that the time series has a constant mean and variance (weak form of definition).
+
+This needs to be tested:
+
+\begin{itemize}
+ \item stochastic stationarity (SS) - ADF test, PP test,...
+ \item deterministic stationarity (DS) - KPSS test
+\end{itemize}
+
+It is important to distinguish between two types. SS time series can be made stationary by differencing, DS time series by removing trend (e.g., by using OLS).
+
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\footnotesize
+
+<<warnings=FALSE>>=
+library(tseries)
+adf.test(df$ts1)
+@
+
+\end{frame}
+
+%-----------
+
+\begin{frame}[fragile]\footnotesize
+
+<<warnings=FALSE>>=
+adf.test(df2$ts1)
+@
+
+\end{frame}
+
+%-----------
+
+
+\begin{frame}[fragile]\large
+\frametitle{Kwiatkowski et al. test}
+$H_0$: Time series is trend stationary:
+<<warning=FALSE>>=
+kpss.test(df$ts1)$p.value
+kpss.test(df2$ts1)$p.value
+@
+If rejected, de-trending will help.
+
+\end{frame}
+
+%-----------
+
+\begin{frame}\large
+\frametitle{Other Useful Functions}
+
+\begin{itemize}
+ \item stl -- time-series decomposition
+ \item ccf -- cross-correlation
+ \item Arima 
+ \item var
+\end{itemize} 
+ 
+\end{frame}
+
+%-----------
+
+\begin{frame}\centering\Large
+Thank you! \bigskip 
+
+homolka@utb.cz\bigskip 
+
+\href{https://github.com/luboRprojects/tidyWorkshop}{\includegraphics[width=0.1\textwidth,height=0.1\textheight,keepaspectratio]{./Images/github}}
+
+
+%\href{https://stackoverflow.com/users/7357438/lstat?tab=profile}{\includegraphics[width=0.3\textwidth,height=0.3\textheight,keepaspectratio]{./Images/stackoverflow}}
+
+\end{frame}
+
+\end{document}
